@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTO Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.mmgg.auction.item.repository.ItemRepository">
+	<resultMap id="itemDetailMap" type="kr.mmgg.auction.item.entity.ItemDetailEntity">
+	    <id property="itemDetailSeq" column="item_detail_seq"/>
+	    <result property="itemInfoSeq" column="item_info_seq"/>
+	    <result property="upgradeCount" column="upgrade_count"/>
+	    <result property="strPt" column="str_pt"/>
+	    <result property="dexPt" column="dex_pt"/>
+	    <result property="intPt" column="int_pt"/>
+	    <result property="lukPt" column="luk_pt"/>
+	    <result property="atkPt" column="atk_pt"/>
+	    <result property="mgcPt" column="mgc_pt"/>
+	    <result property="phyDef" column="phy_def"/>
+	    <result property="mgcDef" column="mgc_def"/>
+	    <result property="evaRate" column="eva_rate"/>
+	    <result property="accRate" column="acc_rate"/>
+	    <result property="movSpd" column="mov_spd"/>
+	    <result property="jmpPt" column="jmp_pt"/>
+	</resultMap>
+	
+	<resultMap id="auctionDetailMap" type="kr.mmgg.auction.item.dto.AuctionDetailDto">
+	    <id property="auctionSeq" column="auction_seq"/>
+	    <result property="itemInfoSeq" column="item_info_seq"/>
+	    <result property="itemDetailSeq" column="item_detail_seq"/>
+	    <result property="userSeq" column="user_seq"/>
+	    <result property="auctionPrice" column="auction_price"/>
+	    <result property="trdType" column="trd_type"/>
+	    <result property="trdStatus" column="trd_status"/>
+	    <result property="insDate" column="ins_date"/>
+	    <result property="uptDate" column="upt_date"/>
+	    <association property="itemDetailEntity" resultMap="itemDetailMap"/>
+	</resultMap>
+	<select id="searchAllItemInfo" parameterType="Integer" resultType="kr.mmgg.auction.item.entity.ItemDetailEntity">
+		SELECT * FROM ITEM_DETAIL WHERE ITEM_INFO_SEQ = ${itemInfoSeq}
+	</select>
+	<select id="searchItemInfo" parameterType="Integer" resultType="kr.mmgg.auction.item.entity.ItemInfoEntity">
+		SELECT * FROM ITEM_INFO WHERE ITEM_INFO_SEQ = ${itemInfoSeq}
+	</select>
+	<select id="searchName" parameterType="String" resultType="kr.mmgg.auction.item.dto.SearchNameDto">
+		SELECT item_info_seq, item_name
+		FROM item_info
+		<if test='itemName != null'>
+			WHERE item_name LIKE '${itemName}%'
+		</if>
+		<if test='itemName == null'>
+			WHERE item_name = '${itemName}'
+		</if>
+	</select>
+	<select id="searchAuctionDtoList" resultMap="auctionDetailMap">
+		SELECT 
+			* 
+		FROM 
+			auction a 
+		INNER JOIN 
+			item_detail b 
+		ON 
+			a.item_detail_seq = b.item_detail_seq
+		WHERE 
+			a.item_info_seq = ${itemInfoSeq}
+		AND
+			a.trd_status = 0
+	</select>
+	
+	<select id="searchOptionAuctionDtoList" resultMap="auctionDetailMap">
+		SELECT 
+			* 
+		FROM 
+			auction a 
+		INNER JOIN 
+			item_detail b 
+		ON 
+			a.item_detail_seq = b.item_detail_seq
+		WHERE 
+			a.item_info_seq = ${dto.itemInfoSeq}
+		AND
+			a.trd_status = 0
+		<if test="dto.minPrice != null">
+		AND
+			a.auction_price >= ${dto.minPrice}
+		</if>
+		<if test="dto.maxPrice != null">
+		AND
+			a.auction_price <![CDATA[ <= ]]> ${dto.maxPrice}
+		</if>
+		<if test="dto.atkPt != null">
+		AND
+			b.atk_pt >= ${dto.atkPt}
+		</if>
+		<if test="dto.mgcPt != null">
+		AND
+			b.mgcPt >= ${dto.mgcPt}
+		</if>
+		<if test="dto.upgradeLimit != null">
+		AND
+			b.upgrade_count = ${dto.upgradeLimit}
+		</if>
+	</select>
+	
+	<insert id="insertReport">
+		INSERT INTO REPORT(AUCTION_SEQ, USER_SEQ)
+		VALUES(#{auctionSeq}, #{userSeq})
+	</insert>
+	
+	<insert id="insertItemDetail" useGeneratedKeys="true" keyProperty="dto.itemDetailSeq">
+		INSERT INTO ITEM_DETAIL(ITEM_INFO_SEQ, UPGRADE_COUNT, STR_PT, DEX_PT, INT_PT, LUK_PT, ATK_PT, MGC_PT, PHY_DEF, MGC_DEF, EVA_RATE, ACC_RATE, MOV_SPD, JMP_PT)
+		VALUES(#{dto.itemInfoSeq},#{dto.upgradeCount},#{dto.strPt},#{dto.dexPt},#{dto.intPt},
+		#{dto.lukPt},#{dto.atkPt},#{dto.mgcPt},#{dto.phyDef},#{dto.mgcDef},#{dto.evaRate},#{dto.accRate},#{dto.movSpd},#{dto.jmpPt})
+	</insert>
+	
+	<insert id="insertAuction">
+		INSERT INTO AUCTION(ITEM_INFO_SEQ, ITEM_DETAIL_SEQ, ITEM_NAME, USER_SEQ, AUCTION_PRICE, TRD_TYPE, TRD_STATUS)
+		VALUES(#{dto.itemInfoSeq},#{dto.itemDetailSeq},#{dto.itemName},#{dto.userSeq},#{dto.auctionPrice},0,0)
+	</insert>
+	
+	<select id="userSearch">
+		SELECT * FROM USER WHERE USER_SEQ = ${userSeq}
+	</select>
+	
+	<select id="searchMyAddItem">
+		SELECT * FROM AUCTION WHERE USER_SEQ = ${userSeq} AND TRD_STATUS = 0
+	</select>
+	
+	<update id="sellOk">
+		UPDATE AUCTION SET TRD_STATUS = 1 WHERE AUCTION_SEQ = ${auctionSeq}
+	</update>
+</mapper>

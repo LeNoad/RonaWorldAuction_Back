@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTO Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.mmgg.auction.login.repository.LoginRepository">
+	<select id="verifyRegister" resultType="Integer">
+		SELECT USER_SEQ FROM USER WHERE DISCORD_ID = ${discordId}
+	</select>
+	<select id="selectUser" resultType="kr.mmgg.auction.login.entity.UserEntity">
+		SELECT * FROM USER WHERE DISCORD_ID = ${discordId}
+	</select>
+	<insert id="register">
+		INSERT INTO USER(RONA_UNQ_IDT, DISCORD_ID, DISCORD_EMAIL, DISCORD_GLOBAL_NAME)
+		VALUES(
+			#{user.ronaUnqIdt},
+			#{user.discordId},
+			#{user.discordEmail},
+			#{user.discordGlobalName}
+		)
+	</insert>
+	<select id="selectUserForDiscordEmail" resultType="kr.mmgg.auction.login.entity.UserEntity">
+		SELECT * FROM USER WHERE DISCORD_EMAIL = '${discordEmail}'
+	</select>
+</mapper>
