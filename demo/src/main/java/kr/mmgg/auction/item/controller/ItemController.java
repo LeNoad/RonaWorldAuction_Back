@@ -13,6 +13,7 @@ import kr.mmgg.auction.item.dto.SearchItemOptionDto;
 import kr.mmgg.auction.item.dto.SelectItemDto;
 import kr.mmgg.auction.item.dto.SellOkDto;
 import kr.mmgg.auction.item.dto.discordId;
+import kr.mmgg.auction.item.entity.Post;
 import kr.mmgg.auction.item.repository.ItemRepository;
 import kr.mmgg.auction.item.service.ItemService;
 import kr.mmgg.auction.login.entity.UserEntity;
@@ -83,5 +84,15 @@ public class ItemController {
 	public ResultDto<?> report(@RequestBody ReportRequestDto reportRequestDto) {
 		itemRepository.insertReport(reportRequestDto.getAuctionSeq(), reportRequestDto.getUserSeq());
 		return new ResultDto<>().makeResult(HttpStatus.OK, "테스트 API", null, "info");
+	}
+	@RequestMapping("/RaidPartyPost")
+	public ResultDto<?> raidPartyPost() {
+		return new ResultDto<>().makeResult(HttpStatus.OK, "테스트 API", itemService.raidPartyPost(), "info");
+	}
+	
+	@RequestMapping("/RaidPartyPostAdd")
+	public ResultDto<?> raidPartyPostAdd(@RequestBody Post post) {
+		itemRepository.raidPartyPostAdd(post);
+		return new ResultDto<>().makeResult(HttpStatus.OK, "테스트 API", itemService.raidPartyPost(), "info");
 	}
 }

@@ -10,11 +10,13 @@ import jakarta.transaction.Transactional;
 import kr.mmgg.auction.item.dto.AuctionDetailDto;
 import kr.mmgg.auction.item.dto.OutputAuctionDetailDto;
 import kr.mmgg.auction.item.dto.OutputItemInfo;
+import kr.mmgg.auction.item.dto.PostDto;
 import kr.mmgg.auction.item.dto.SearchItemOptionDto;
 import kr.mmgg.auction.item.dto.SearchMyAddItemDto;
 import kr.mmgg.auction.item.dto.SearchNameDto;
 import kr.mmgg.auction.item.dto.SelectItemDto;
 import kr.mmgg.auction.item.dto.SellOkDto;
+import kr.mmgg.auction.item.entity.Post;
 import kr.mmgg.auction.item.repository.ItemRepository;
 
 @Service
@@ -64,5 +66,9 @@ public class ItemService {
 	public List<SearchMyAddItemDto> sellOk(SellOkDto sellOkDto) {
 		itemRepository.sellOk(sellOkDto.getAuctionSeq());
 		return itemRepository.searchMyAddItem(sellOkDto.getUserSeq());
+	}
+	
+	public List<PostDto> raidPartyPost() {
+		return itemRepository.raidPartyPost();
 	}
 }

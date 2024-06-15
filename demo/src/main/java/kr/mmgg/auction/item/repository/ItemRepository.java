@@ -7,12 +7,14 @@ import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
 import kr.mmgg.auction.item.dto.AuctionDetailDto;
+import kr.mmgg.auction.item.dto.PostDto;
 import kr.mmgg.auction.item.dto.SearchItemOptionDto;
 import kr.mmgg.auction.item.dto.SearchMyAddItemDto;
 import kr.mmgg.auction.item.dto.SearchNameDto;
 import kr.mmgg.auction.item.dto.SelectItemDto;
 import kr.mmgg.auction.item.entity.ItemDetailEntity;
 import kr.mmgg.auction.item.entity.ItemInfoEntity;
+import kr.mmgg.auction.item.entity.Post;
 import kr.mmgg.auction.login.entity.UserEntity;
 
 @Mapper
@@ -40,4 +42,7 @@ public interface ItemRepository {
 	
 	public UserEntity userSearch(Integer userSeq);
 	
+	public List<PostDto> raidPartyPost();
+	
+	public void raidPartyPostAdd(@Param("dto") Post post);
 }

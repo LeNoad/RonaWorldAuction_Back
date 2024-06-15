@@ -38,7 +38,7 @@
 		SELECT * FROM ITEM_INFO WHERE ITEM_INFO_SEQ = ${itemInfoSeq}
 	</select>
 	<select id="searchName" parameterType="String" resultType="kr.mmgg.auction.item.dto.SearchNameDto">
-		SELECT item_info_seq, item_name, image_no
+		SELECT item_info_seq, item_name
 		FROM item_info
 		<if test='itemName != null'>
 			WHERE item_name LIKE '${itemName}%'
@@ -113,10 +113,6 @@
 		VALUES(#{dto.itemInfoSeq},#{dto.itemDetailSeq},#{dto.itemName},#{dto.userSeq},#{dto.auctionPrice},0,0)
 	</insert>
 	
-	<insert id="raidPartyPostAdd">
-		INSERT INTO POST(TITLE, CHAR_NAME, USER_SEQ, CHAR_LEVEL, CHAR_DMG, CATEGORY, INS_DATE)
-		VALUES(#{dto.title}, #{dto.charName}, #{dto.userSeq}, #{dto.charLevel}, #{dto.charDmg}, #{dto.category}, #{dto.insDate})
-	</insert>
 	<select id="userSearch">
 		SELECT * FROM USER WHERE USER_SEQ = ${userSeq}
 	</select>
@@ -128,9 +124,4 @@
 	<update id="sellOk">
 		UPDATE AUCTION SET TRD_STATUS = 1 WHERE AUCTION_SEQ = ${auctionSeq}
 	</update>
-	
-	<select id="raidPartyPost">
-		SELECT * FROM POST a INNER JOIN USER b on a.user_seq = b.user_seq 
-		ORDER BY INS_DATE DESC
-	</select>
 </mapper>

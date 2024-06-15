@@ -3,6 +3,7 @@ package kr.mmgg.auction.item.entity;
 public class ItemInfoEntity {
 	private Integer ItemDetailSeq;
 	private Integer ItemInfoSeq;
+	private Integer ImageNo;
 	private String ItemName;
 	private String ItemType;
 	private Integer ReqLevel;
@@ -28,6 +29,12 @@ public class ItemInfoEntity {
 	private Integer UpgradeLimit;
 	
 	
+	public Integer getImageNo() {
+		return ImageNo;
+	}
+	public void setImageNo(Integer imageNo) {
+		ImageNo = imageNo;
+	}
 	public String getItemType() {
 		return ItemType;
 	}

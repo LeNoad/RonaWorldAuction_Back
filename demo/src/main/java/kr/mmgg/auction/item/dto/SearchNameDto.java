@@ -3,7 +3,15 @@ package kr.mmgg.auction.item.dto;
 public class SearchNameDto {
 	private Integer ItemInfoSeq;
 	private String ItemName;
+	private Integer ImageNo;
 	
+	
+	public Integer getImageNo() {
+		return ImageNo;
+	}
+	public void setImageNo(Integer imageNo) {
+		ImageNo = imageNo;
+	}
 	public Integer getItemInfoSeq() {
 		return ItemInfoSeq;
 	}

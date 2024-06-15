@@ -52,7 +52,7 @@ public class SecurityConfig {
 
 	@Bean
 	WebSecurityCustomizer webSecurityCustomizer() {
-		return (web) -> web.ignoring().requestMatchers("/src/main/resources/**");
+		return (web) -> web.ignoring().requestMatchers("/resources/**");
 	}
 
 	@Bean
